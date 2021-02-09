@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Список событий</title>
+        <link rel="stylesheet" href="css/css/style.css">
+        <meta charset="UTF-8">
+        <script type="text/javascript">
+         function sum(){
+     table = document.getElementById('table').getElementsByTagName('tr');
+   var click = 0;
+   for(var i = 0; i < table.length; i++) {
+     if(table[i].querySelector('.clicks') && table[i].querySelector('.clicks').textContent) {
+       click +=parseInt(table[i].querySelector('.clicks').textContent);
+     }
+    
+    
+   }
+   table = document.getElementById('table').getElementsByTagName('tr');
+var cost = 0;
+  for(var i = 0; i < table.length; i++) {
+     if(table[i].querySelector('.cost') && table[i].querySelector('.cost').textContent) {
+       cost +=parseInt(table[i].querySelector('.cost').textContent);
+     }
+    }
+    table = document.getElementById('table').getElementsByTagName('tr');
+    var view = 0;
+  for(var i = 0; i < table.length; i++) {
+     if(table[i].querySelector('.view') && table[i].querySelector('.view').textContent) {
+       view +=parseInt(table[i].querySelector('.view').textContent);
+     }
+    }
+
+    document.getElementById("cpc").innerHTML = cost/click;
+    document.getElementById("cpm").innerHTML = cost/view * 1000 ;
+  };
+        </script>
+    </head>
+    <body onload="sum()">
+        <h1>Результаты поиска</h1>
+        <table class="table" id="table">
+            <thead>
+                <tr>
+                    <th>Дата события</th>
+                    <th>Просмотров</th>
+                    <th>Переходов </th>
+                    <th>Стоимость Переходов</th>
+                </tr>
+            </thead>
+        {{range . }}
+        <tr>
+            <td>{{.DateT}}</td>
+            <td class="view">{{.ViewsT}}</td>
+            <td class="clicks">{{.ClicksT}}</td>
+            <td class="cost">{{.CostT}}</td>
+        </tr>
+        {{end}}
+</table>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Cредняя стоимость клика</th>
+                    <th>Средняя стоимость 1000 показов</th>
+                </tr>
+            </thead>
+            <tr>
+                <td id="cpc">0</td>
+                <td id="cpm">0</td>
+            </tr>
+        </table>
+        <a href="http://localhost:9000/drop">Сбросить статистику</a>
+        <a href="http://localhost:9000">Главная</a>
+        <a href="http://localhost:9000/save">Создать событие</a>
+        </body>
+</html>

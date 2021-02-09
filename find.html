@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Список событий</title>
+        <link rel="stylesheet" href="css/css/style.css">
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <h1>Поиск событий</h1>
+        <form method="post" action="/show">
+            <label>Дата1</label>
+            <input type="date" name="date1" required>
+            <label>Дата2</label>
+            <input type="date" name="date2" required>
+        <input type="submit">
+        </form>
+        <a href="http://localhost:9000/drop">Сбросить статистику</a>
+        <a href="http://localhost:9000">Главная</a>
+        <a href="http://localhost:9000/save">Вернутся к добавлению событий</a>
+    </body>
+</html>

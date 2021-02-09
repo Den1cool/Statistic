@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Добавление события</title>
+        <link rel="stylesheet" href="css/css/style.css">
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <h1>Добавление события</h1>
+        <form method="POST">
+        <input type="date" name="date" required>
+        <input type="number" min="0" name="views" placeholder="Кол-во показов"> 
+        <input type="number" min="0" name="clicks" placeholder="Кол-во кликов">
+        <input type="number" min="0" step="0.01" name="cost" placeholder="Стоимость кликов">
+        <input type="submit">
+        </form>
+        <a href="http://localhost:9000/find">Перейти к поиску событий</a>
+        <a href="http://localhost:9000">Главная</a>
+        <a href="http://localhost:9000/drop">Сбросить статистику</a>
+    </body>
+</html>
