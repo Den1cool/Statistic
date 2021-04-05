@@ -23,13 +23,9 @@ type Form struct {
 	Date2 string
 }
 
+var database *sql.DB
+
 func save(w http.ResponseWriter, r *http.Request) {
-	connStr := "user=postgres password=root dbname=db sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
 	r.ParseForm()
 	http.ServeFile(w, r, "save.html")
 	date := r.FormValue("date")
@@ -46,7 +42,7 @@ func save(w http.ResponseWriter, r *http.Request) {
 		if cost == "" {
 			cost = "0"
 		}
-		_, err = db.Exec("insert into static VALUES($1, $2, $3, $4)", date, views, clicks, cost)
+		_, err := database.Exec("insert into static VALUES($1, $2, $3, $4)", date, views, clicks, cost)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -57,19 +53,13 @@ func save(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func show(w http.ResponseWriter, r *http.Request) {
-	connStr := "user=postgres password=root dbname=db sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
 	tmpl, _ := template.ParseFiles("show.html")
 	r.ParseForm()
 	dat1 := r.FormValue("date1")
 	dat2 := r.FormValue("date2")
 	fmt.Println(dat1)
 	fmt.Println(dat2)
-	rows, err := db.Query("select * from static where date >= $1  AND date <=  $2", dat1, dat2)
+	rows, err := database.Query("select * from static where date >= $1  AND date <=  $2", dat1, dat2)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -91,13 +81,7 @@ func show(w http.ResponseWriter, r *http.Request) {
 }
 
 func drop(w http.ResponseWriter, r *http.Request) {
-	connStr := "user=postgres password=root dbname=db sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-	_, err = db.Exec("TRUNCATE static")
+	_, err := database.Exec("TRUNCATE static")
 	if err != nil {
 		log.Fatalln(err)
 		fmt.Fprintf(w, "%s", "Произошла ошибка попробуйте удалить данные позже")
@@ -112,6 +96,13 @@ func find(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "find.html")
 }
 func main() {
+	connStr := "user=postgres password=root dbname=db sslmode=disable"
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+	database = db
 	mux := http.NewServeMux()
 	mux.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
 	mux.HandleFunc("/", home)
